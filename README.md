@@ -64,9 +64,9 @@ Prior to building, we need to install all dependencees.
 0. Check that CMake, Boost, Eigen3 are all installed.
 1. Install Colmap, openMVG, etc. that you will use for mapping.
 2. For CUDA, install a dev-kit through the following link (https://anaconda.org/conda-forge/cudatoolkit-dev) and supply the CUDA TOOLKIT path at terminal. For example, (note you need to locate the env at which CUDA is installed)
-
-    export CUDA_BIN_PATH=/home/USER/anaconda3/envs/CUDA_INSTALLED_ENV_NAME/bin
-
+```
+export CUDA_BIN_PATH=/home/USER/anaconda3/envs/CUDA_INSTALLED_ENV_NAME/bin
+```
 3. Install OpenCV for C++ (https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html).
 
 4. Install tclap by downloading the source code from here (https://sourceforge.net/projects/tclap/files/) and following the 'INSTALL' text file.
@@ -74,29 +74,30 @@ Prior to building, we need to install all dependencees.
 4. Install RapidJSON with https://zoomadmin.com/HowToInstall/UbuntuPackage/rapidjson-dev.
 
 5. Install Ceres: first clone the repo (https://github.com/ceres-solver/ceres-solver), and do the following
-
-    git clone https://github.com/ceres-solver/ceres-solver
-    mkdir ceres-bin
-    cd ceres-solver
-    git checkout 1.12.0
-    cd ..
-    cd ceres-bin
-    cmake ../ceres-solver
-    make -j8
-    sudo make install
-
+```
+git clone https://github.com/ceres-solver/ceres-solver
+mkdir ceres-bin
+cd ceres-solver
+git checkout 1.12.0
+cd ..
+cd ceres-bin
+cmake ../ceres-solver
+make -j8
+sudo make install
+```
 After this, we need to fix a bug in the generated .cmake file. It is a bug from old ceres that we need to fix prior to compiling the rest of the code.
 
-    sudo vi /usr/local/lib/cmake/Ceres/CeresConfig.cmake
-    # Go to line 87 and modify else() -> elseif()
+sudo vi /usr/local/lib/cmake/Ceres/CeresConfig.cmake
+# Go to line 87 and modify else() -> elseif()
 
 Once this is done, just open a terminal in the Line3D++ source directory and type:
 
-    mkdir build
-    cd build
-    cmake ..
-    make
-
+```
+mkdir build
+cd build
+cmake ..
+make
+```
 You can change the compile settings (i.e. whether to use CUDA or not) by using CMake. Most comfortably, you can do this using the CMake GUI (Ubuntu package: `cmake-qt-gui`).
 
 **Note:** If you get compile errors that say something like `data.__outbuf[-1] == '\0'`, or linker errors that have something to do with shared libraries, the most probable cause is that the CERES-Solver was not built as a shared library, but a static one (default in version 1.8.0). You have to change this in the `CMakeLists.txt` of CERES (`BUILD_SHARED_LIBRARIES`), or disable CERES for Line3D++ (--> CMake).
