@@ -52,14 +52,6 @@ Requirements
 * Ceres-Solver (optional, **must be built as shared library on UNIX systems!**)
 * RapidJSON (optional, for OpenMVG executable only)
 
-The code has been tested under **Ubuntu 14.04 LTS** with the following versions:
-
-* Boost==1.55.0
-* Eigen==3.2.0
-* OpenCV=={2.4.10, 3.0}
-* CUDA=={5.0, 5.5, 6.0}
-* Ceres-Solver=={1.8.0, 1.12.0}
-
 Basically, the Ubuntu system packages should be fine (whenever available). Building on Windows or MacOS systems should be possible as well
 with the provided `CMakeLists.txt`, but it has not been tested by us!
 
@@ -68,9 +60,37 @@ also improves the quality of the 3D model (when the Ceres-Solver is available).
 
 Building on Linux Systems
 =========================
+Prior to building, we need to install all dependencees.
+0. Check that CMake, Boost, Eigen3 are all installed.
+1. Install Colmap, openMVG, etc. that you will use for mapping.
+2. For CUDA, install a dev-kit through the following link (https://anaconda.org/conda-forge/cudatoolkit-dev) and supply the CUDA TOOLKIT path at terminal. For example, (note you need to locate the env at which CUDA is installed)
 
-When all required libraries and CMake are properly installed, building the Line3D++ library and the executables should be straightforward.
-Just open a terminal in the Line3D++ source directory and type:
+    export CUDA_BIN_PATH=/home/USER/anaconda3/envs/CUDA_INSTALLED_ENV_NAME/bin
+
+3. Install OpenCV for C++ (https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html).
+
+4. Install tclap by downloading the source code from here (https://sourceforge.net/projects/tclap/files/) and following the 'INSTALL' text file.
+
+4. Install RapidJSON with https://zoomadmin.com/HowToInstall/UbuntuPackage/rapidjson-dev.
+
+5. Install Ceres: first clone the repo (https://github.com/ceres-solver/ceres-solver), and do the following
+
+    git clone https://github.com/ceres-solver/ceres-solver
+    mkdir ceres-bin
+    cd ceres-solver
+    git checkout 1.12.0
+    cd ..
+    cd ceres-bin
+    cmake ../ceres-solver
+    make -j8
+    sudo make install
+
+After this, we need to fix a bug in the generated .cmake file. It is a bug from old ceres that we need to fix prior to compiling the rest of the code.
+
+    sudo vi /usr/local/lib/cmake/Ceres/CeresConfig.cmake
+    # Go to line 87 and modify else() -> elseif()
+
+Once this is done, just open a terminal in the Line3D++ source directory and type:
 
     mkdir build
     cd build
