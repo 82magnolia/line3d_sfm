@@ -86,9 +86,10 @@ make -j8
 sudo make install
 ```
 After this, we need to fix a bug in the generated .cmake file. It is a bug from old ceres that we need to fix prior to compiling the rest of the code.
-
+```
 sudo vi /usr/local/lib/cmake/Ceres/CeresConfig.cmake
-# Go to line 87 and modify else() -> elseif()
+```
+Go to line 87 and modify else() -> elseif()
 
 Once this is done, just open a terminal in the Line3D++ source directory and type:
 
